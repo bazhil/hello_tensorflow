@@ -10,14 +10,10 @@ def three_emp_analysis(file):
     :param file:
     :return:
     """
-    # добавляем рабочую директорию
-    work_dir = os.getcwd()
-
-    # файлов в папке может быть сколько угодно
+    # Подключаем рабочую книгу, открываем таблицу на первом листе     
     workbook = xlrd.open_workbook(file)
-
     worksheet = workbook.sheet_by_index(0)
-
+    # Определяем количество строк и столбцов     
     row_number, col_number = worksheet.nrows, worksheet.ncols
 
     # Определяем количество сотрудников по числу столбцов
