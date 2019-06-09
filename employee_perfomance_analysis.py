@@ -50,11 +50,9 @@ def read_xlsx(file):
                 real_date = datetime.date(real_date_year, real_date_month, real_date_day)
 
                 # наполняем словарь данными
-                # возможно добавить поле для общего количества дней, затраченных на проект
                 for i in range(len(row)):
                     project_info['НазваниеПроекта'] = row[0]
                     project_info['СданВСрок'] = plan_date >= real_date
-                    # project_info['ЗатраченоТрудоДней'] = None
                     project_info['Руководитель'] = row[1]
                     project_info['ДатаСдачиПлан'] = row[2]
                     project_info['ДатаСдачиФакт'] = row[3]
