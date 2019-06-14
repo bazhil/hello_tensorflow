@@ -98,27 +98,27 @@ def print_projects(projects):
     try:
         for project in projects:
             if project['СданВСрок'] == True:
-                print('Проект {} сдан в срок. Дата сдачи - {}, дата сдачи по плану - {}.'.format(
-                    project['НазваниеПроекта'], project['ДатаСдачиФакт'], project['ДатаСдачиПлан']))
+                print('Проект {} сдан в срок. Руководитель проекта {}. Дата сдачи - {}, дата сдачи по плану - {}. '.format(
+                    project['НазваниеПроекта'], project['Руководитель'], project['ДатаСдачиФакт'], project['ДатаСдачиПлан']))
                 for employee in project['Сотрудники']:
                     real_day_cost = project['Сотрудники'][employee]['ЗатраченоДнейРеально']
                     plan_day_cost = project['Сотрудники'][employee]['КоличествоДнейПоПлану']
-                    if real_day_cost <= plan_day_cost:
-                        print('Сотрудник {} - успешен. Затратил дней - {}. Количество дней по плану - {}.'.format(
-                            employee, real_day_cost or 'не указано',
-                                      plan_day_cost or 'не указано'))
-                    elif real_day_cost == '' or plan_day_cost == '':
+                    if real_day_cost == '' or plan_day_cost == '':
                         print('Сотрудник {} - условно успешен (необходимо уточнить какое время он затратил на проект). '
-                              'Затратил дней - {}. Количество дней по плану - {}.'.format(
-                            employee, real_day_cost or 'не указано',
-                                      plan_day_cost or 'не указано'))
+                          'Затратил дней - {}. Количество дней по плану - {}.'.format(
+                        employee, real_day_cost or 'не указано',
+                                  plan_day_cost or 'не указано'))
+                    elif real_day_cost <= plan_day_cost:
+                        print('Сотрудник {} - успешен. Затратил дней - {}. Количество дней по плану - {}.'.format(
+                            employee, real_day_cost,
+                                      plan_day_cost))
                     else:
                         print('Сотрудник {} - не успешен. Затратил дней - {}. Количество дней по плану - {}.'.format(
-                            employee, real_day_cost or 'не указано',
-                                      plan_day_cost or 'не указано'))
+                            employee, real_day_cost,
+                                      plan_day_cost))
             else:
-                print('Проект {} не сдан в срок. Сотрудники, его выполнявшие условно не успешны. Дата сдачи - {}, дата сдачи по плану - {}.'.format(
-                    project['НазваниеПроекта'], project['ДатаСдачиФакт'], project['ДатаСдачиПлан']))
+                print('Проект {} не сдан в срок. Сотрудники его выполнявшие условно не успешны. Руководитель проекта {}. Дата сдачи - {}, дата сдачи по плану - {}. '.format(
+                    project['НазваниеПроекта'], project['Руководитель'], project['ДатаСдачиФакт'], project['ДатаСдачиПлан']))
             print('\n')
     except:
         print('В работе функции \'print_projects()\' произошла ошибка')
