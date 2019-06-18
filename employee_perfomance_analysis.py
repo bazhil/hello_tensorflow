@@ -106,16 +106,17 @@ def print_projects(projects):
                     if real_day_cost == '' or plan_day_cost == '':
                         print('Сотрудник {} - условно успешен (необходимо уточнить какое время он затратил на проект). '
                           'Затратил дней - {}. Количество дней по плану - {}.'.format(
-                        employee, real_day_cost or 'не указано',
-                                  plan_day_cost or 'не указано'))
+                        employee, real_day_cost or 'не указано', plan_day_cost or 'не указано'))
+                    elif (real_day_cost != '' and plan_day_cost == '0') or (real_day_cost != '0' and plan_day_cost == '0'):
+                        print('Сотрудник {} работал над проектом не смотря на отсутствие его в плане. Считается успешным,'
+                              ' при условии, что его план выполнен. Затратил дней - {}. Количество дней по плану - {}.'.format(
+                        employee, real_day_cost or 'не указано', plan_day_cost))
                     elif real_day_cost <= plan_day_cost:
                         print('Сотрудник {} - успешен. Затратил дней - {}. Количество дней по плану - {}.'.format(
-                            employee, real_day_cost,
-                                      plan_day_cost))
+                            employee, real_day_cost, plan_day_cost))
                     else:
                         print('Сотрудник {} - не успешен. Затратил дней - {}. Количество дней по плану - {}.'.format(
-                            employee, real_day_cost,
-                                      plan_day_cost))
+                            employee, real_day_cost, plan_day_cost))
             else:
                 print('Проект {} не сдан в срок. Сотрудники его выполнявшие условно не успешны. Руководитель проекта {}. Дата сдачи - {}, дата сдачи по плану - {}. '.format(
                     project['НазваниеПроекта'], project['Руководитель'], project['ДатаСдачиФакт'], project['ДатаСдачиПлан']))
