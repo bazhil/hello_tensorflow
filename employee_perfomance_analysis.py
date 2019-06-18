@@ -65,8 +65,8 @@ def read_xlsx(file):
                     # и заполняем их при помощи итератора
                     for employee in employees:
                         project_info['Сотрудники'][employee] = {}
-                        project_info['Сотрудники'][employee]['КоличествоДнейПоПлану'] = days.__next__()
-                        project_info['Сотрудники'][employee]['ЗатраченоДнейРеально'] = days.__next__()
+                        project_info['Сотрудники'][employee]['КоличествоДнейПоПлану'] = str(days.__next__())
+                        project_info['Сотрудники'][employee]['ЗатраченоДнейРеально'] = str(days.__next__())
 
                 # добавляем наполненные словари в список проектов
                 projects.append(project_info)
