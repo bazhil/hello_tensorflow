@@ -107,7 +107,7 @@ def print_projects(projects):
                         print('Сотрудник {} - условно успешен (необходимо уточнить какое время он затратил на проект). '
                           'Затратил дней - {}. Количество дней по плану - {}.'.format(
                         employee, real_day_cost or 'не указано', plan_day_cost or 'не указано'))
-                    elif (real_day_cost != '' and plan_day_cost == '0') or (real_day_cost != '0' and plan_day_cost == '0'):
+                    elif real_day_cost != '0' and plan_day_cost == '0':
                         print('Сотрудник {} работал над проектом не смотря на отсутствие его в плане. Считается успешным,'
                               ' при условии, что его план выполнен. Затратил дней - {}. Количество дней по плану - {}.'.format(
                         employee, real_day_cost or 'не указано', plan_day_cost))
