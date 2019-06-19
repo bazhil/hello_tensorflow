@@ -11,9 +11,6 @@ def read_xlsx(file):
     :param file: excel-файл
     :return: список словарей с данными по проектам
     """
-    # добавляем рабочую директорию
-    work_dir = os.getcwd()
-
     # определяем рабочую книгу
     workbook = xlrd.open_workbook(file)
 
@@ -65,14 +62,16 @@ def read_xlsx(file):
                     # и заполняем их при помощи итератора
                     for employee in employees:
                         project_info['Сотрудники'][employee] = {}
-                        project_info['Сотрудники'][employee]['КоличествоДнейПоПлану'] = str(days.__next__())
-                        project_info['Сотрудники'][employee]['ЗатраченоДнейРеально'] = str(days.__next__())
+                        project_info['Сотрудники'][employee]['КоличествоДнейПоПлану'] = days.__next__()
+                        project_info['Сотрудники'][employee]['ЗатраченоДнейРеально'] = days.__next__()
 
                 # добавляем наполненные словари в список проектов
                 projects.append(project_info)
         return projects
     except:
-        print('В работе функции \'read_xlsx()\' произошла ошибка. Возможно файл {} заполнен некорректно.'.format(file))
+        print('В работе функции \'read_xlsx()\' произошла ошибка. Возможно файл {} заполнен некорректно. \nУбедитесь, что '
+              'формат файла соответствует заданному, и в нем содержатся все необходимые данные: \n2) Даты сдачи проектов (планируемые и реальные) должны быть в формате "дата".'
+              ' \n1) Затраченные на работу над проектом дни должны быть в числовом формате.\n'.format(file))
 
 def sort_projects(projects):
     """
@@ -87,7 +86,7 @@ def sort_projects(projects):
                 projects.insert(0, projects.pop(projects.index(project)))
         return projects
     except:
-        print('В работе функции \'sort_projects()\' произошла ошибка')
+        print('В работе функции \'sort_projects()\' произошла ошибка.')
 
 def print_projects(projects):
     """
@@ -103,28 +102,37 @@ def print_projects(projects):
                 for employee in project['Сотрудники']:
                     real_day_cost = project['Сотрудники'][employee]['ЗатраченоДнейРеально']
                     plan_day_cost = project['Сотрудники'][employee]['КоличествоДнейПоПлану']
-                    if real_day_cost == '' or plan_day_cost == '':
+                    if real_day_cost == '' and plan_day_cost == '':
+                        print('Нет данных для оценки эффективности сотрудника {}. Затратил дней - {}. Количество дней по плану - {}.'.format(
+                        employee, real_day_cost or 'не указано', plan_day_cost or 'не указано'))
+                    elif real_day_cost == '' or plan_day_cost == '':
                         print('Сотрудник {} - условно успешен (необходимо уточнить какое время он затратил на проект). '
                           'Затратил дней - {}. Количество дней по плану - {}.'.format(
                         employee, real_day_cost or 'не указано', plan_day_cost or 'не указано'))
-                    elif real_day_cost != '0' and plan_day_cost == '0':
+                    elif real_day_cost == '' and plan_day_cost == (0.0 or 0):
+                        print('Работа над данным проектом не запланирована у сотрудника {}, но необходимо уточнить '
+                              'количество дней, затраченных им на проект. Затратил дней - {}. Количество дней по плану - {}.'.format(
+                                employee, real_day_cost or 'не указано', plan_day_cost))
+                    elif real_day_cost == (0.0 or 0) and plan_day_cost == (0.0 or 0):
+                        print('Сотрудник {} не принимал участие в работе над проектом. Затратил дней - {}. Количество дней по плану - {}.'.format(
+                                employee, real_day_cost or 'не указано', plan_day_cost))
+                    elif real_day_cost != (0.0 or 0) and plan_day_cost == (0.0 or 0):
                         print('Сотрудник {} работал над проектом не смотря на отсутствие его в плане. Считается успешным,'
-                              ' при условии, что его план выполнен. Затратил дней - {}. Количество дней по плану - {}.'.format(
+                              ' при условии, что план сотрудника выполнен. Затратил дней - {}. Количество дней по плану - {}.'.format(
                         employee, real_day_cost or 'не указано', plan_day_cost))
-                    elif real_day_cost <= plan_day_cost:
+                    elif real_day_cost != (0.0 or 0) and (real_day_cost <= plan_day_cost):
                         print('Сотрудник {} - успешен. Затратил дней - {}. Количество дней по плану - {}.'.format(
                             employee, real_day_cost, plan_day_cost))
                     else:
                         print('Сотрудник {} - не успешен. Затратил дней - {}. Количество дней по плану - {}.'.format(
                             employee, real_day_cost, plan_day_cost))
             else:
-                print('Проект {} не сдан в срок. Сотрудники его выполнявшие условно не успешны. Руководитель проекта {}. Дата сдачи - {}, дата сдачи по плану - {}. '.format(
+                print('Проект {} не сдан в срок. Сотрудники его выполнявшие условно не успешны. Руководитель проекта {}. '
+                      'Дата сдачи - {}, дата сдачи по плану - {}. '.format(
                     project['НазваниеПроекта'], project['Руководитель'], project['ДатаСдачиФакт'], project['ДатаСдачиПлан']))
             print('\n')
     except:
         print('В работе функции \'print_projects()\' произошла ошибка')
-
-
 
 if __name__ == '__main__':
     # добавляем рабочую директорию
@@ -135,6 +143,6 @@ if __name__ == '__main__':
             try:
                 read_xlsx(file)
             except:
-                print('Возможно в файле {} что-то не так'.format(file))
+                print('Возможно в файле {} что-то не так. Убедитесь, что в нем содержатся все необходимые данные.'.format(file))
     sort_projects(projects)
     print_projects(projects)
